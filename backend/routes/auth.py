@@ -26,15 +26,15 @@ def login():
     email = request_json["email"]
     password = request_json["password"]
 
-    student_id = email.replace("@pitt.edu", "")
+    username = email.replace("@pitt.edu", "")
     if (
-        student_id not in credentials_dict
-        or credentials_dict[student_id]["password"] != password
+        username not in credentials_dict
+        or credentials_dict[username]["password"] != password
     ):
         return jsonify({"error": "Invalid credentials"}), 401
 
     payload = {
-        "sub": student_id,
+        "sub": username,
         "email": email,
         "iat": datetime.datetime.now(datetime.timezone.utc),
         "exp": datetime.datetime.now(datetime.timezone.utc)
@@ -69,4 +69,4 @@ def me():
         return jsonify({"error": "Invalid token"}), 401
     except jwt.DecodeError:
         return jsonify({"error": "Malformed token"}), 401
-    return jsonify({"student_id": payload["sub"], "email": payload["email"]}), 200
+    return jsonify({"username": payload["sub"], "email": payload["email"]}), 200
