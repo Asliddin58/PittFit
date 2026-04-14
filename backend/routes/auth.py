@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from functools import wraps
 import datetime
 import jwt
 import os
@@ -16,9 +17,39 @@ credentials_dict = {
 active_tokens = set()
 
 
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get("Authorization")
+
+        if not token:
+            return jsonify({"error": "No token"}), 401
+
+        if token.startswith("Bearer "):
+            token = token.split(" ", 1)[1]
+
+        if token not in active_tokens:
+            return jsonify({"error": "Not logged in"}), 401
+
+        try:
+            jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        except jwt.ExpiredSignatureError:
+            active_tokens.discard(token)
+            return jsonify({"error": "Expired token"}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({"error": "Invalid token"}), 401
+
+        return f(*args, **kwargs)
+
+    return decorated
+
+
 @auth_bp.route("/login", methods=["POST"])
 def login():
     token = request.headers.get("Authorization")
+    if token and token.startswith("Bearer "):
+        token = token.split(" ", 1)[1]
+
     if token and token in active_tokens:
         return jsonify({"error": "Already logged in"}), 400
 
@@ -46,27 +77,22 @@ def login():
 
 
 @auth_bp.route("/logout", methods=["POST"])
+@token_required
 def logout():
     token = request.headers.get("Authorization")
-    if not token or token not in active_tokens:
-        return jsonify({"error": "Not logged in"}), 400
+    if token.startswith("Bearer "):
+        token = token.split(" ", 1)[1]
+
     active_tokens.discard(token)
     return jsonify({"message": "Logged out"}), 200
 
 
 @auth_bp.route("/me")
+@token_required
 def me():
     token = request.headers.get("Authorization")
-    if not token or token not in active_tokens:
-        return jsonify({"error": "Not logged in"}), 401
+    if token.startswith("Bearer "):
+        token = token.split(" ", 1)[1]
 
-    try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms="HS256")
-    except jwt.ExpiredSignatureError:
-        active_tokens.discard(token)
-        return jsonify({"error": "Expired token"}), 401
-    except jwt.InvalidSignatureError:
-        return jsonify({"error": "Invalid token"}), 401
-    except jwt.DecodeError:
-        return jsonify({"error": "Malformed token"}), 401
+    payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
     return jsonify({"username": payload["sub"], "email": payload["email"]}), 200
