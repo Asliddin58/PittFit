@@ -1,17 +1,14 @@
+from argon2.exceptions import VerifyMismatchError
 from flask import Blueprint, jsonify, request
 from functools import wraps
+from models.db import db, ph
+from models.user import User
 import datetime
 import jwt
 import os
 
 JWT_SECRET = os.getenv("JWT_SECRET", "dev-secret")
 auth_bp = Blueprint("auth_bp", import_name=__name__)
-
-# FIXME: Store credentials in a database table that models users
-credentials_dict = {
-    "abc93": {"email": "abc93@pitt.edu", "password": "pass1"},
-    "xyz12": {"email": "xyz12@pitt.edu", "password": "pass2"},
-}
 
 # FIXME: Store generated tokens in a database table
 active_tokens = set()
@@ -55,14 +52,28 @@ def login():
 
     request_json = request.get_json()
     email = request_json["email"]
+    if not email.endswith("@pitt.edu"):
+        return jsonify({"error": "Must use a Pitt email address"}), 401
+
     password = request_json["password"]
 
     username = email.replace("@pitt.edu", "")
-    if (
-        username not in credentials_dict
-        or credentials_dict[username]["password"] != password
-    ):
-        return jsonify({"error": "Invalid credentials"}), 401
+    registered_user = db.session.execute(
+        db.select(User).filter_by(pitt_email=email)
+    ).scalar_one_or_none()
+
+    if not registered_user:
+        hashed = ph.hash(password)
+        user = User(pitt_email=email, password_hash=hashed)
+        db.session.add(user)
+        db.session.commit()
+        status_code = 201  # new user entry created in table
+    else:
+        try:
+            ph.verify(registered_user.password_hash, password)
+        except VerifyMismatchError:
+            return jsonify({"error": "Invalid credentials"}), 401
+        status_code = 200
 
     payload = {
         "sub": username,
@@ -73,7 +84,7 @@ def login():
     }
     token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
     active_tokens.add(token)
-    return jsonify({"token": token}), 200
+    return jsonify({"token": token}), status_code
 
 
 @auth_bp.route("/logout", methods=["POST"])
