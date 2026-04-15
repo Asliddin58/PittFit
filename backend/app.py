@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 from flask_migrate import Migrate
 
-from models import db, User   # 👈 add this
+from models import db, User
 
 load_dotenv()
 
@@ -20,6 +20,7 @@ migrate = Migrate(app, db)
 app.register_blueprint(auth_bp, url_prefix="/auth")
 CORS(app)
 
+
 # quick DB test route
 @app.route("/health/db")
 def health_db():
@@ -29,5 +30,7 @@ def health_db():
     except Exception as e:
         return {"db": "error", "details": str(e)}
 
+
 if __name__ == "__main__":
     app.run(debug=os.getenv("FLASK_ENV") == "dev")
+
