@@ -221,8 +221,8 @@ flask db upgrade
 | Sprint 1 | Functional requirements, use cases, scenarios | ✅ Complete |
 | Sprint 2 | Refined requirements, user stories, analysis object model | ✅ Complete |
 | Sprint 3 | System architecture, subsystem decomposition, design goals | ✅ Complete |
-| Sprint 4 | Tech stack, deployment plan, system infrastructure setup | 🔄 In Progress |
-
+| Sprint 4 | Tech stack, deployment plan, system infrastructure setup | ✅ Complete |
+| Sprint 5 | Feature development, documentation, git workflows + branching strategies & pull requests | 🔄 In Progress |
 ---
 
 *University of Pittsburgh — CS 1530 Software Engineering*
