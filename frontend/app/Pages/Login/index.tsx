@@ -1,10 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, TextInput } from "react-native";
 import { useState } from "react";
+import { useRouter } from "expo-router";
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:5001";
 
 export default function Index() {
+    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -27,8 +29,7 @@ export default function Index() {
         }
 
         await AsyncStorage.setItem("token", data.token);
-        // TODO: Redirect to dashboard on authentication
-        alert("Logged in!");
+        router.push("/Pages/PageSelector");
         setLoading(false);
     };
 
