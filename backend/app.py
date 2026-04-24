@@ -4,6 +4,7 @@ from routes.auth import auth_bp
 import os
 from dotenv import load_dotenv
 from flask_migrate import Migrate
+from routes.announcement import announcement_bp
 
 from models import db, User
 
@@ -20,6 +21,8 @@ migrate = Migrate(app, db)
 app.register_blueprint(auth_bp, url_prefix="/auth")
 CORS(app)
 
+app.register_blueprint(announcement_bp, url_prefix="/announcements")
+
 
 # quick DB test route
 @app.route("/health/db")
@@ -33,4 +36,3 @@ def health_db():
 
 if __name__ == "__main__":
     app.run(debug=os.getenv("FLASK_ENV") == "dev")
-
