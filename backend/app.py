@@ -5,6 +5,7 @@ import os
 from dotenv import load_dotenv
 from flask_migrate import Migrate
 from routes.announcement import announcement_bp
+from routes.occupancy import occupancy_bp
 
 from models import db, User
 
@@ -23,6 +24,7 @@ CORS(app)
 
 app.register_blueprint(announcement_bp, url_prefix="/announcements")
 
+app.register_blueprint(occupancy_bp, url_prefix="/occupancy")
 
 # quick DB test route
 @app.route("/health/db")
