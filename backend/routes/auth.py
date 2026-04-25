@@ -41,6 +41,9 @@ def token_required(f):
     return decorated
 
 
+# Authenticates a user by Pitt email and password.
+# On first login, creates a new user record with an argon2-hashed password.
+# Returns a JWT token on success (201 for new user, 200 for existing).
 @auth_bp.route("/login", methods=["POST"])
 def login():
     token = request.headers.get("Authorization")
