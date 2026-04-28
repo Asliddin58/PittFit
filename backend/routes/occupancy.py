@@ -1,11 +1,14 @@
 from flask import Blueprint, jsonify
-from models import RecCenterRoom
+from sqlalchemy import select
+
+from models import RecCenterRoom, db
 
 occupancy_bp = Blueprint("occupancy", __name__)
 
+
 @occupancy_bp.route("/", methods=["GET"])
 def get_occupancy():
-    rooms = RecCenterRoom.query.all()
+    rooms = db.session.execute(select(RecCenterRoom)).scalars().all()
 
     result = []
 
