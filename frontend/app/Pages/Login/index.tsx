@@ -11,6 +11,9 @@ export default function Index() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    // Authenticates the user against the backend POST /auth/login endpoint.
+    // Stores the returned JWT in AsyncStorage for use in subsequent requests.
+    // Redirects to PageSelector on success, shows error alert on failure.
     const handleSSOLogin = async () => {
         setLoading(true);
         const response = await fetch(`${BASE_URL}/auth/login`, {

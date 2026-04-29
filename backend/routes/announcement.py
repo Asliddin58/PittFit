@@ -5,6 +5,9 @@ from models.announcement import Announcement
 announcement_bp = Blueprint("announcements_bp", __name__)
 
 
+# Returns all active announcements in descending chronological order.
+# Inactive announcements (is_active=False) are filtered out automatically.
+# FR[2.4]: announcements displayed in descending chronological order.
 @announcement_bp.route("/", methods=["GET"])
 def get_announcements():
     announcements = (
