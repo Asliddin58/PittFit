@@ -132,9 +132,9 @@ main                        ← production-ready code only
 │
 ├── develop                 ← integration branch for each sprint
 │   │
-│   ├── feature/FR1-pitt-sso-login
-│   ├── feature/FR2-occupancy-display
-│   ├── feature/FR3-workout-templates
+│   ├── feature/pitt-sso-login
+│   ├── feature/occupancy-display
+│   ├── feature/workout-templates
 │   ├── bugfix/booking-double-entry
 │   └── chore/update-readme
 │
@@ -145,7 +145,7 @@ main                        ← production-ready code only
 
 | Type | Pattern | Example |
 |---|---|---|
-| Feature | `feature/<FR-id>-short-description` | `feature/FR6-room-booking` |
+| Feature | `feature/<description>` | `feature/room-booking` |
 | Bug fix | `bugfix/<description>` | `bugfix/occupancy-refresh-crash` |
 | Chore / docs | `chore/<description>` | `chore/add-sprint4-diagrams` |
 | Release | `release/sprint-<n>` | `release/sprint-4` |
@@ -187,6 +187,17 @@ test: add unit tests for WorkoutTemplate class
 ```bash
 cd frontend
 npm install
+```
+
+Copy the environment template and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+Start the app:
+
+```bash
 npx expo start
 ```
 
@@ -197,6 +208,17 @@ cd backend
 python -m venv venv
 source venv/bin/activate      # Windows: venv\Scripts\activate
 pip install -r requirements.txt
+```
+
+Copy the environment template and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+Start the server:
+
+```bash
 flask run
 ```
 
@@ -210,8 +232,9 @@ psql -U postgres -c "CREATE DATABASE pittfit;"
 flask db upgrade
 ```
 
-> Full environment variable setup (API keys, DB connection string, Duo credentials) is documented in `backend/.env.example`.
+> Required environment variables for the backend and frontend are documented in `backend/.env.example` and `frontend/.env.example` respectively.
 
+---
 
 ## Project Status
 
@@ -222,7 +245,9 @@ flask db upgrade
 | Sprint 2 | Refined requirements, user stories, analysis object model | ✅ Complete |
 | Sprint 3 | System architecture, subsystem decomposition, design goals | ✅ Complete |
 | Sprint 4 | Tech stack, deployment plan, system infrastructure setup | ✅ Complete |
-| Sprint 5 | Feature development, documentation, git workflows + branching strategies & pull requests | 🔄 In Progress |
+| Sprint 5 | Feature development, documentation, git workflows + branching strategies & pull requests | ✅ Complete |
+| Sprint 6 | Cleanup, polish, final presentation & demo | 🔄 In Progress |
+
 ---
 
 *University of Pittsburgh — CS 1530 Software Engineering*
