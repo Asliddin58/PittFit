@@ -10,9 +10,7 @@ import os
 JWT_SECRET = os.getenv("JWT_SECRET", "dev-secret")
 auth_bp = Blueprint("auth_bp", import_name=__name__)
 
-# FIXME: Store generated tokens in a database table
 active_tokens = set()
-
 
 def token_required(f):
     @wraps(f)
