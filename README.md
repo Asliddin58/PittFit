@@ -33,14 +33,14 @@ PittFit is a cross-platform mobile application (iOS & Android) that gives Pitt s
 
 ## Team
 
-| Name | Sprint Role |
-|---|---|
-| Thomas Harrison | Product Owner (PO) |
-| Kambin Patris Zarei | Scrum Master (SM) |
-| Ilya Abbasian | Developer |
-| Harris Roberts | Developer |
-| Asliddin Nurboev | Developer |
-| Aidan O'Hara | Developer |
+| Name | Sprint Role | Contributions |
+|---|---| --- |
+| Thomas Harrison | Product Owner (PO) | Configured database integration with SQLAlchemy, created initial `User` model, created occupancy and hours API endpoints, worked on presentation slides |
+| Kambin Patris Zarei | Scrum Master (SM) | Implemented mock Pitt SSO auth flow, integrated auth endpoints with login screen and database, extended DB schema for core entities, created `.env.example` files |
+| Ilya Abbasian | Developer | Implemented JWT session management, token validation for protected routes, logout via token blacklisting, auth unit tests |
+| Harris Roberts | Developer | Scaffolded frontend and backend directories, installed core dependencies, implemented announcements API endpoint, removed empty database directory |
+| Asliddin Nurboev | Developer | Set up project repo, defined branching model in README, implemented announcements UI screen, updated README for sprint 6 submission |
+| Aidan O'Hara | Developer | Built login screen UI, implemented Occupancy and Announcements screens, added post-login navigation, recorded demo video |
 
 ---
 
@@ -246,7 +246,7 @@ flask db upgrade
 | Sprint 3 | System architecture, subsystem decomposition, design goals | ✅ Complete |
 | Sprint 4 | Tech stack, deployment plan, system infrastructure setup | ✅ Complete |
 | Sprint 5 | Feature development, documentation, git workflows + branching strategies & pull requests | ✅ Complete |
-| Sprint 6 | Cleanup, polish, final presentation & demo | 🔄 In Progress |
+| Sprint 6 | Cleanup, polish, final presentation & demo | ✅ Complete |
 
 ---
 
